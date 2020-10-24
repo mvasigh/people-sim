@@ -8,7 +8,11 @@
     <link rel="stylesheet" type="text/css" href="./index.css" />
 </head>
 <body>
-    <canvas id="canvas" width="800" height="600"></canvas>
+    <div class="control">
+        <label id="points-label" for="no-of-points">Number of Points:</label>
+        <input id="no-of-points" type="range" min="1" max="2000" step="1" />
+    </div>
+    <canvas id="canvas" width="800" height="800"></canvas>
 
     <script defer src="./index.js"></script>
 </body>

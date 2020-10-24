@@ -1,5 +1,9 @@
 import * as ACTIONS from './actions';
 
+const display = document.getElementById('points-label');
+const slider = document.getElementById('no-of-points');
+const initialPoints = 200;
+
 class Canvas {
   constructor(config = {}) {
     this.canvas = document.getElementById('canvas');
@@ -8,13 +12,12 @@ class Canvas {
 
     this.initialize = this.initialize.bind(this);
     this.createPoint = this.createPoint.bind(this);
+    this.setPoints = this.setPoints.bind(this);
     this.draw = this.draw.bind(this);
   }
 
   initialize() {
-    this.points = Array(this.config.points || 5)
-      .fill(null)
-      .map(this.createPoint);
+    this.setPoints(this.config.points);
     this.draw();
   }
 
@@ -42,6 +45,17 @@ class Canvas {
       ctx.fill();
     }
     requestAnimationFrame(this.draw);
+  }
+
+  setPoints(points) {
+    if (this.points && this.points.length) {
+      for (let point of this.points) {
+        point.worker.terminate();
+      }
+    }
+    this.points = Array(points || 5)
+      .fill(null)
+      .map(this.createPoint);
   }
 
   createPoint() {
@@ -80,5 +94,14 @@ class Canvas {
   }
 }
 
-const canvas = new Canvas({ points: 50 });
+const canvas = new Canvas({ points: initialPoints });
 canvas.initialize();
+
+display.innerText = `No. of Points: ${initialPoints}`;
+slider.value = initialPoints;
+
+slider.addEventListener('change', (e) => {
+  const value = Number(e.target.value);
+  display.innerText = `No. of Points: ${value}`;
+  canvas.setPoints(value);
+});
